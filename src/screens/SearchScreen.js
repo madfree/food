@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import ResultsList from "../components/ResultsList";
 import SearchBar from "../components/SearchBar";
 import useResults from "../hooks/useResults";
 
 const SearchScreen = () => {
     const [term, setTerm] = useState('');
     const [searchApi, results, errorMessage] = useResults();
+
+    const filterResultsByPrice = (price) => {
+        return results.filter(result => {
+            return result.price === price;
+        });
+    };
 
     return <View>
         <SearchBar 
@@ -15,6 +22,9 @@ const SearchScreen = () => {
         />
         {errorMessage ? <Text>{errorMessage}</Text> : null}
         <Text>We found {results.length} results</Text>
+        <ResultsList resultList={filterResultsByPrice('€')} title="Cost Effective"/>
+        <ResultsList resultList={filterResultsByPrice('€€')} title="Bit Pricier" />
+        <ResultsList resultList={filterResultsByPrice('€€€')} title="Big Spender"/>
     </View>
 };
 
